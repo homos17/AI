@@ -11,6 +11,8 @@ from sklearn.metrics import classification_report
 import warnings
 warnings.filterwarnings('ignore')
 
+from maze_environment import MazeEnvironment
+
 from tensorflow import keras
 from tensorflow.keras import layers
 
@@ -110,7 +112,6 @@ class RiskPredictor:
     def generate_training_data(self, mazes_dict):
         X, y = [], []
         for data in mazes_dict.values():
-            from maze_environment import MazeEnvironment
             env = MazeEnvironment(data)
             for r in range(env.rows):
                 for c in range(env.cols):

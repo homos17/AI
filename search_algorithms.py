@@ -29,7 +29,7 @@ class SearchResult:
 # ── 1. Breadth-First Search ───────────────────────────────────
 def breadth_first_search(env):
     t0 = time.perf_counter()
-    visited = []
+    visited = set()
     queue = [[env.start]]
     expanded = 0
 
@@ -39,7 +39,7 @@ def breadth_first_search(env):
 
         if node in visited:
             continue
-        visited.append(node)
+        visited.add(node)
         expanded += 1
 
         if node == env.goal:
@@ -70,7 +70,7 @@ def breadth_first_search(env):
 # ── 2. Depth-First Search ─────────────────────────────────────
 def depth_first_search(env):
     t0 = time.perf_counter()
-    visited = []
+    visited = set()
     stack = [[env.start]]
     expanded = 0
 
@@ -80,7 +80,7 @@ def depth_first_search(env):
 
         if node in visited:
             continue
-        visited.append(node)
+        visited.add(node)
         expanded += 1
 
         if node == env.goal:
@@ -121,7 +121,7 @@ def a_star_search(env):
         f_cost = g_cost + h_cost
         return f_cost, last_node
         
-    visited = []
+    visited = set()
     queue = [[(env.start, 0)]]
     expanded = 0
     
@@ -132,7 +132,7 @@ def a_star_search(env):
         
         if node in visited:
             continue
-        visited.append(node)
+        visited.add(node)
         expanded += 1
         
         if node == env.goal:
@@ -183,7 +183,7 @@ def risk_aware_a_star(env, risk_map):
         f_cost = g_cost + h_cost
         return f_cost, last_node
         
-    visited = []
+    visited = set()
     queue = [[(env.start, 0)]]
     expanded = 0
     
@@ -194,7 +194,7 @@ def risk_aware_a_star(env, risk_map):
         
         if node in visited:
             continue
-        visited.append(node)
+        visited.add(node)
         expanded += 1
         
         if node == env.goal:

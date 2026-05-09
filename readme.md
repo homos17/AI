@@ -31,7 +31,7 @@ maze_solver_challenge/
 ├── main.py              # Entry point: orchestrates training, solving, and visualization
 ├── maze_environment.py  # Defines the grid world, walls, traps, and valid moves
 ├── search_algorithms.py # Implementations of BFS, DFS, A*, and Risk-Aware A*
-├── risk_predictor.py    # Neural network (scikit-learn MLP) for trap probability prediction
+├── risk_predictor.py    # Neural network (Keras MLP) for trap probability prediction
 ├── visualizer.py        # Matplotlib visualizations (paths, risk heatmaps, bar charts)
 ├── level_generator.py   # [Stretch] Procedural maze generation via recursive backtracking
 ├── moving_enemy.py      # [Stretch] Time-stepping moving obstacle and A* avoidance
@@ -117,4 +117,4 @@ The project heavily emphasizes algorithmic comparison over graphics. Below is th
 *   **Python 3.x**
 *   **NumPy**: Grid manipulation and mathematical operations.
 *   **Matplotlib**: Visualizing maze grids, paths, risk heatmaps, and comparison bar charts.
-*   **Scikit-Learn**: `MLPClassifier` for the neural network risk-prediction add-on.
+*   **TensorFlow / Keras**: `Sequential` MLP for the neural network risk-prediction add-on.

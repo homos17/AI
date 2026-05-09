@@ -168,7 +168,7 @@ def main():
     wp_b = free_cells[3 * len(free_cells) // 4]
 
     enemy = MovingEnemy(demo_env, wp_a, wp_b, speed=1)
-    print(f"  Enemy patrols {wp_a} ↔ {wp_b}")
+    print(f"  Enemy patrols {wp_a} <-> {wp_b}")
     print(f"  Patrol route length: {len(enemy.route)}")
 
     enemy_result = a_star_with_enemy(demo_env, enemy)
@@ -179,35 +179,35 @@ def main():
     # ── 6. Final Analysis ─────────────────────────────────────
     heading("ALGORITHM ANALYSIS & CONCLUSIONS")
     print("""
-  ┌─────────────────┬──────────────────────────────────────────────────┐
-  │ Algorithm       │ Characteristics                                  │
-  ├─────────────────┼──────────────────────────────────────────────────┤
-  │ BFS             │ ✓ Shortest path (fewest steps)                   │
-  │                 │ ✓ Complete & optimal for unweighted graphs       │
-  │                 │ ✗ Ignores trap costs                             │
-  │                 │ ✗ High memory (wide frontier)                   │
-  ├─────────────────┼──────────────────────────────────────────────────┤
-  │ DFS             │ ✓ Low memory (deep stack)                        │
-  │                 │ ✓ Fast on some mazes (luck-dependent)            │
-  │                 │ ✗ NOT optimal (may find very long paths)         │
-  │                 │ ✗ NOT complete in infinite spaces                │
-  ├─────────────────┼──────────────────────────────────────────────────┤
-  │ A*              │ ✓ Optimal with admissible heuristic              │
-  │                 │ ✓ Considers trap costs in g(n)                  │
-  │                 │ ✓ Fewer expansions than BFS/DFS                 │
-  │                 │ ✗ More complex; needs good heuristic             │
-  ├─────────────────┼──────────────────────────────────────────────────┤
-  │ Risk-Aware A*   │ ✓ Uses NN-predicted trap probabilities          │
-  │                 │ ✓ Avoids predicted risky cells                   │
-  │                 │ ✓ Often finds paths with FEWER traps hit         │
-  │                 │ ✗ Depends on training data quality               │
-  │                 │ ✗ Slight overhead for risk inference             │
-  └─────────────────┴──────────────────────────────────────────────────┘
+  +-------------------+----------------------------------------------------+
+  | Algorithm         | Characteristics                                    |
+  +-------------------+----------------------------------------------------+
+  | BFS               | + Shortest path (fewest steps)                     |
+  |                   | + Complete & optimal for unweighted graphs         |
+  |                   | - Ignores trap costs                               |
+  |                   | - High memory (wide frontier)                      |
+  +-------------------+----------------------------------------------------+
+  | DFS               | + Low memory (deep stack)                           |
+  |                   | + Fast on some mazes (luck-dependent)               |
+  |                   | - NOT optimal (may find very long paths)            |
+  |                   | - NOT complete in infinite spaces                   |
+  +-------------------+----------------------------------------------------+
+  | A*                | + Optimal with admissible heuristic                 |
+  |                   | + Considers trap costs in g(n)                      |
+  |                   | + Fewer expansions than BFS/DFS                    |
+  |                   | - More complex; needs good heuristic               |
+  +-------------------+----------------------------------------------------+
+  | Risk-Aware A*     | + Uses NN-predicted trap probabilities              |
+  |                   | + Avoids predicted risky cells                      |
+  |                   | + Often finds paths with FEWER traps hit            |
+  |                   | - Depends on training data quality                  |
+  |                   | - Slight overhead for risk inference                |
+  +-------------------+----------------------------------------------------+
 
   KEY FINDINGS:
   1. A* consistently finds the lowest-COST path (accounting for traps).
   2. BFS finds the fewest-STEPS path but ignores trap penalties.
-  3. DFS is unpredictable — sometimes fast, often suboptimal.
+  3. DFS is unpredictable -- sometimes fast, often suboptimal.
   4. Risk-Aware A* with NN predictions can avoid traps the agent
      hasn't "seen" yet, reducing trap encounters significantly.
   5. The neural network achieves good trap prediction accuracy
