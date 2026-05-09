@@ -10,12 +10,13 @@ from maze_environment import MazeEnvironment, FREE, WALL, TRAP, START, GOAL
 
 
 def generate_maze(rows: int, cols: int, trap_density: float = 0.05,
-                  seed: int = None) -> dict:
+                  seed: int = None, extra_openings: float = 0.15) -> dict:
     """
-    Create a random maze with guaranteed start→goal path.
+    Create a random maze with guaranteed start->goal path.
     1. Fill grid with walls.
     2. Carve passages with recursive back-tracking (DFS).
-    3. Place traps on random free cells.
+    3. Break extra walls to create multiple paths (so algorithms differ).
+    4. Place traps on random free cells.
     """
     if seed is not None:
         random.seed(seed)
@@ -48,13 +49,34 @@ def generate_maze(rows: int, cols: int, trap_density: float = 0.05,
         else:
             stack.pop()
 
+    # Break extra walls to create alternative paths
+    # This makes the maze have multiple routes so BFS/DFS/A* find different solutions
+    inner_walls = []
+    for r in range(2, rows - 2):
+        for c in range(2, cols - 2):
+            if grid[r][c] == WALL:
+                # count how many free neighbours this wall has
+                free_around = 0
+                for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == FREE:
+                        free_around += 1
+                # only break walls that connect two separate free areas
+                if free_around >= 2:
+                    inner_walls.append((r, c))
+
+    n_break = max(1, int(len(inner_walls) * extra_openings))
+    if inner_walls:
+        for r, c in random.sample(inner_walls, min(n_break, len(inner_walls))):
+            grid[r][c] = FREE
+
     # Choose start (top-left) and goal (bottom-right)
     free_cells = []
     for r in range(rows):
         for c in range(cols):
             if grid[r][c] == FREE:
                 free_cells.append((r, c))
-                
+
     start = (1, 1)
     goal  = (rows - 2, cols - 2)
     grid[start] = START
@@ -65,7 +87,7 @@ def generate_maze(rows: int, cols: int, trap_density: float = 0.05,
     for r, c in free_cells:
         if (r, c) != start and (r, c) != goal:
             trap_candidates.append((r, c))
-            
+
     n_traps = max(1, int(len(trap_candidates) * trap_density))
     for r, c in random.sample(trap_candidates, min(n_traps, len(trap_candidates))):
         grid[r][c] = TRAP

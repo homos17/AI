@@ -134,7 +134,7 @@ def main():
 
     # ── 4. Stretch: Procedural Maze ───────────────────────────
     heading("STRETCH — Procedural Level Generator")
-    gen_data = generate_maze(13, 13, trap_density=0.06, seed=42)
+    gen_data = generate_maze(17, 17, trap_density=0.10, extra_openings=0.20)
     gen_env  = MazeEnvironment(gen_data)
     gen_env.display_console(title="Generated Maze")
 
