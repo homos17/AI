@@ -1,13 +1,7 @@
-"""
-Maze Environment Module
-Defines the game world: grid, walls, traps, start, goal, and valid moves.
-Core AI Concept: Agents & Environments
-"""
-
 import numpy as np
 from collections import deque
 
-# ── Cell Type Constants ────────────────────────────────────────
+# Cell Type Constants
 FREE  = 0
 WALL  = 1
 TRAP  = 2
@@ -16,7 +10,7 @@ GOAL  = 6
 
 SYMBOLS = {FREE: '.', WALL: '#', TRAP: 'X', START: 'S', GOAL: 'G'}
 
-# ── Three Required Mazes ───────────────────────────────────────
+# Three Required Mazes
 MAZES = {
     "Maze 1 - Simple (10x10)": {
         "grid": [
@@ -93,7 +87,7 @@ class MazeEnvironment:
         self.start = tuple(maze_data["start"])
         self.goal  = tuple(maze_data["goal"])
 
-    # ── Queries ────────────────────────────────────────────────
+    # Queries 
     def is_valid(self, pos: tuple) -> bool:
         """Within bounds and not a wall."""
         r, c = pos
@@ -128,7 +122,7 @@ class MazeEnvironment:
                     positions.append((r, c))
         return positions
 
-    # ── Console Renderer ───────────────────────────────────────
+    # Console Renderer
     def display_console(self, path=None, title="Maze"):
         """Print the maze (and optional path) to stdout."""
         canvas = []

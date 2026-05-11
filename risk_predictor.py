@@ -1,9 +1,3 @@
-"""
-Neural-Network Risk Predictor
-Learns trap probability from local maze features.
-Core AI Concept: Neural-network add-on for agent reasoning.
-"""
-
 import numpy as np
 from collections import deque
 from sklearn.model_selection import train_test_split
@@ -42,7 +36,6 @@ class RiskPredictor:
         )
         return model
 
-    # ── Feature Engineering ────────────────────────────────────
     @staticmethod
     def _dist_to_nearest(env, pos, cell_type, max_depth=6):
         """BFS distance to nearest cell of `cell_type` (capped)."""
@@ -95,32 +88,32 @@ class RiskPredictor:
                 if env.is_valid((nr, nc)):
                     free_nb += 1
             else:
-                wd += 1                          # out-of-bounds ≡ wall
+                wd += 1                         
 
         return [
             w3, t3, f3, wd, td,
-            abs(r - env.goal[0]) + abs(c - env.goal[1]),   # dist to goal
-            abs(r - env.start[0]) + abs(c - env.start[1]), # dist to start
-            self._dist_to_nearest(env, pos, 2),            # dist to trap
-            r / rows, c / cols,                            # normalised pos
-            1 if free_nb <= 1 else 0,                      # dead-end
-            1 if free_nb == 2 else 0,                      # corridor
-            1 if free_nb >= 3 else 0,                      # junction
+            abs(r - env.goal[0]) + abs(c - env.goal[1]),   
+            abs(r - env.start[0]) + abs(c - env.start[1]), 
+            self._dist_to_nearest(env, pos, 2),           
+            r / rows, c / cols,             
+            1 if free_nb <= 1 else 0,                     
+            1 if free_nb == 2 else 0,                          
+            1 if free_nb >= 3 else 0,                      
         ]
 
-    # ── Data Generation ────────────────────────────────────────
+    #Data Generation
     def generate_training_data(self, mazes_dict):
         X, y = [], []
         for data in mazes_dict.values():
             env = MazeEnvironment(data)
             for r in range(env.rows):
                 for c in range(env.cols):
-                    if env.grid[r][c] != 1:                # skip walls
+                    if env.grid[r][c] != 1:
                         X.append(self.extract_features(env, (r, c)))
                         y.append(1 if env.grid[r][c] == 2 else 0)
         return np.array(X), np.array(y)
 
-    # ── Training ───────────────────────────────────────────────
+    #Training
     def train(self, mazes_dict):
         X, y = self.generate_training_data(mazes_dict)
 
@@ -148,7 +141,7 @@ class RiskPredictor:
         # Train model using fit
         self.model.fit(
             X_tr, y_tr,
-            epochs=100,
+            epochs=100, 
             batch_size=16,
             verbose=1
         )
@@ -171,7 +164,7 @@ class RiskPredictor:
         print("=" * 62)
         return acc_test
 
-    # ── Inference ──────────────────────────────────────────────
+    #Inference
     def predict_risk_map(self, env):
         """Return a rows×cols array of P(trap) for every non-wall cell."""
         if not self.trained:

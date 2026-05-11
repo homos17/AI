@@ -1,13 +1,6 @@
-"""
-Search Algorithm Module
-Implements BFS, DFS, A*, and Risk-Aware A* using concepts from lab.
-"""
-
 import time
 
 class SearchResult:
-    """Uniform container returned by every search algorithm."""
-
     def __init__(self, algorithm, path, path_length, nodes_expanded,
                  time_taken, total_cost, found, trap_count=0):
         self.algorithm      = algorithm
@@ -16,7 +9,7 @@ class SearchResult:
         self.nodes_expanded = nodes_expanded
         self.time_taken     = time_taken
         self.total_cost     = total_cost
-        self.found          = found
+        self.found          = found 
         self.trap_count     = trap_count
 
     def __repr__(self):
@@ -26,7 +19,6 @@ class SearchResult:
                 f"traps={self.trap_count}>")
 
 
-# ── 1. Breadth-First Search ───────────────────────────────────
 def breadth_first_search(env):
     t0 = time.perf_counter()
     visited = set()
@@ -67,7 +59,6 @@ def breadth_first_search(env):
     return SearchResult("BFS", [], 0, expanded, elapsed, 0, False)
 
 
-# ── 2. Depth-First Search ─────────────────────────────────────
 def depth_first_search(env):
     t0 = time.perf_counter()
     visited = set()
@@ -108,7 +99,6 @@ def depth_first_search(env):
     return SearchResult("DFS", [], 0, expanded, elapsed, 0, False)
 
 
-# ── 3. A* Search ──────────────────────────────────────────────
 def a_star_search(env):
     t0 = time.perf_counter()
     
@@ -166,7 +156,7 @@ def a_star_search(env):
     return SearchResult("A*", [], 0, expanded, elapsed, 0, False)
 
 
-# ── 4. Risk-Aware A* (Neural-Network enhanced) ────────────────
+
 def risk_aware_a_star(env, risk_map):
     RISK_WEIGHT_G = 2.0
     RISK_WEIGHT_H = 3.0
@@ -227,15 +217,3 @@ def risk_aware_a_star(env, risk_map):
 
     elapsed = time.perf_counter() - t0
     return SearchResult("Risk-Aware A*", [], 0, expanded, elapsed, 0, False)
-
-
-# ── Helpers ────────────────────────────────────────────────────
-def _reconstruct(came_from, node, start):
-    # Kept for compatibility with moving_enemy.py
-    path = []
-    while node in came_from:
-        path.append(node)
-        node = came_from[node]
-    path.append(start)
-    path.reverse()
-    return path

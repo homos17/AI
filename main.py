@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-"""
-MAZE SOLVER CHALLENGE
-Build a game agent that escapes faster and smarter.
-Compare search algorithms in a game-like environment.
-
-Core AI Concepts:
-  • Agents & Environments
-  • BFS / DFS / A* Search
-  • Neural-network risk prediction
-
-Minimum Scope (all covered):
-  ✅ 3 different mazes
-  ✅ 3 search algorithms (BFS, DFS, A*)
-  ✅ 1 risk-prediction feature (MLP)
-
-Stretch Features:
-  ✅ Level generator
-  ✅ Moving enemy
-"""
-
 import sys
 import time
 import numpy as np
@@ -34,10 +13,8 @@ from search_algorithms import (
 from risk_predictor import RiskPredictor
 from level_generator import generate_maze
 from visualizer import visualize_maze, plot_comparison
+from pygame_visualizer import run_pygame_demo
 
-# ═══════════════════════════════════════════════════════════════
-#  UTILITY PRINTING
-# ═══════════════════════════════════════════════════════════════
 
 SEP = "=" * 70
 
@@ -60,30 +37,17 @@ def print_result_table(results):
     print()
 
 
-# ═══════════════════════════════════════════════════════════════
-#  MAIN
-# ═══════════════════════════════════════════════════════════════
 
 def main():
     heading("MAZE SOLVER CHALLENGE")
-    print("""
-  A game agent must navigate mazes with walls, traps, and
-  changing conditions.  We compare BFS, DFS, A*, and a
-  Neural-Network Risk-Aware A* across three mazes.
 
-  Stretch features included:
-    • Procedural level generator
-    • Moving enemy avoidance
-    """)
-
-    # ── 1. Train Neural-Network Risk Predictor ─────────────────
     predictor = RiskPredictor()
     predictor.train(MAZES)
 
     all_results = {}
     maze_names  = list(MAZES.keys())
 
-    # ── 2. Solve Each Maze ────────────────────────────────────
+    #Solve Each Maze 
     for maze_name, maze_data in MAZES.items():
         heading(f"SOLVING: {maze_name}")
         env = MazeEnvironment(maze_data)
@@ -125,15 +89,18 @@ def main():
 
         all_results[maze_name] = results
 
-        # Matplotlib visualisation
+        # Pygame animated visualisation (auto-plays)
+        run_pygame_demo(env, results, risk_map, maze_name)
+
+        # Matplotlib visualisation (static images)
         visualize_maze(env, results, risk_map, maze_name)
 
-    # ── 3. Cross-Maze Comparison Charts ───────────────────────
+    # Cross-Maze Comparison
     heading("CROSS-MAZE COMPARISON")
     plot_comparison(all_results, maze_names)
 
-    # ── 4. Stretch: Procedural Maze ───────────────────────────
-    heading("STRETCH — Procedural Level Generator")
+    # Procedural Maze
+    heading("STRETCH - Procedural Level Generator")
     gen_data = generate_maze(17, 17, trap_density=0.10, extra_openings=0.20)
     gen_env  = MazeEnvironment(gen_data)
     gen_env.display_console(title="Generated Maze")
@@ -149,8 +116,8 @@ def main():
     print_result_table(gen_results)
     visualize_maze(gen_env, gen_results, gen_risk, "Generated Maze")
 
-    # ── 5. Stretch: Moving Enemy ──────────────────────────────
-    heading("STRETCH — Moving Enemy Avoidance")
+    # Moving Enemy
+    heading("STRETCH - Moving Enemy Avoidance")
     from moving_enemy import MovingEnemy, a_star_with_enemy
 
     # Pick first maze for the demo
@@ -176,7 +143,11 @@ def main():
     if enemy_result.found:
         demo_env.display_console(enemy_result.path, title="A* with Moving Enemy")
 
-    # ── 6. Final Analysis ─────────────────────────────────────
+    # Pygame animation for generated maze + enemy
+    run_pygame_demo(gen_env, gen_results, gen_risk, "Generated Maze",
+                    enemy=enemy, enemy_result=enemy_result)
+
+    # Final Analysis
     heading("ALGORITHM ANALYSIS & CONCLUSIONS")
     print("""
   +-------------------+----------------------------------------------------+

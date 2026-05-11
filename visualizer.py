@@ -1,8 +1,3 @@
-"""
-Visualization Module
-Matplotlib-based rendering of mazes, paths, risk maps, and comparison charts.
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -29,13 +24,11 @@ PATH_COLORS = {
 }
 
 
-# ── Single Maze Figure ────────────────────────────────────────
+# Single Maze Figure
 def visualize_maze(env, results_dict, risk_map=None, maze_name="Maze"):
-    """
-    Draw a 2×2 or 1×3 figure:
-      Row 1 → BFS, DFS, A*
-      Row 2 → Risk heatmap, Risk-Aware A*   (if risk_map provided)
-    """
+    #Draw a 2×2 or 1×3 figure:
+    #Row 1 → BFS, DFS, A*
+    #Row 2 → Risk heatmap, Risk-Aware A*   (if risk_map provided)
     has_risk = risk_map is not None
     nrows = 2 if has_risk else 1
     ncols = 3
@@ -47,7 +40,7 @@ def visualize_maze(env, results_dict, risk_map=None, maze_name="Maze"):
     if nrows == 1:
         axes = [axes]
 
-    # ── Draw one panel ────────────────────────────────────────
+    # Draw one panel
     def _draw(ax, title, path=None, color=None):
         display = env.grid.astype(float).copy()
         if path:
@@ -147,7 +140,7 @@ def _build_summary_text(results):
     return lines
 
 
-# ── Cross-Maze Comparison Bar Charts ──────────────────────────
+# Cross-Maze Comparison Bar Charts
 def plot_comparison(all_results, maze_names):
     fig, axes = plt.subplots(2, 2, figsize=(16, 11))
     fig.suptitle("Algorithm Comparison Across All Mazes",

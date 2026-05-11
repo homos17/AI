@@ -1,10 +1,3 @@
-"""
-Moving Enemy Module (stretch feature)
-An enemy patrols a fixed route through the maze.
-The search algorithm must avoid cells occupied by the enemy
-at the time-step the agent would arrive there.
-"""
-
 import numpy as np
 from collections import deque
 from maze_environment import MazeEnvironment, WALL
@@ -37,7 +30,7 @@ class MovingEnemy:
     def position_at(self, time_step: int) -> tuple:
         """Return enemy position at a given time step (ping-pong)."""
         cycle = (len(self.route) - 1) * 2
-        if cycle == 0:
+        if cycle == 0:  
             return self.route[0]
         idx = time_step % cycle
         if idx < len(self.route):
